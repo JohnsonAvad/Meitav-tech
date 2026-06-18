@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — Meitav Tech Limited</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── ABOUT HERO — fixed image, sliding taglines ── */
+.about-hero {
+  position: relative; height: 72vh; min-height: 500px;
+  display: flex; align-items: center; overflow: hidden; margin-top: 68px;
+}
+.about-hero-bg {
+  position: absolute; inset: 0;
+  background-image: url('images/about-us.jpg');
+  background-size: cover; background-position: center;
+}
+.about-hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.75) 50%, rgba(0,0,0,0.45) 100%);
+}
+.about-hero-content { position: relative; z-index: 2; padding: 0 52px; max-width: 700px; }
+.about-tagline-wrap { height: 120px; white-space: nowrap; text-overflow: ellipsis; position: relative; margin-top: 20px; }
+.about-tagline {
+  position: absolute; top: 0; left: 0; right: 0; 
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-style: italic;
+  font-size: clamp(26px, 3.5vw, 46px); color: var(--white); line-height: 1.2;
+  opacity: 0; transition: opacity 1s ease, transform 1s ease; transform: translateY(20px);
+  text-shadow: 0 2px 24px rgba(0,0,0,0.9);
+  display: flex;
+  
+}
+.about-tagline.active { opacity: 1; transform: translateY(0); }
+.about-tagline .red { color: var(--red); }
+
+/* ── OUR STORY ── */
+.story-section { background: var(--black); padding: 92px 50px; }
+.story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; margin-top: 52px; }
+.story-img-wrap { border-radius: 14px; overflow: hidden; aspect-ratio: 4/3; position: relative; }
+.story-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.story-img-wrap::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 35%; background: linear-gradient(to top, rgba(10,10,10,0.5), transparent); pointer-events: none; }
+.story-text h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(30px,3.5vw,48px); text-transform: uppercase; line-height: 1; margin-bottom: 8px; color: var(--white); }
+.story-text h2 span { color: var(--red); }
+.story-text .subhead { font-size: 17px; font-weight: 600; color: rgba(255,255,255,0.55); font-style: italic; margin-bottom: 24px; }
+.story-text p { font-size: 15px; color: rgba(255,255,255,0.68); line-height: 1.85; margin-bottom: 16px; }
+
+/* ── VMC CARDS ── */
+.vmc-section { background: var(--dark); border-top: 1px solid rgba(255,255,255,0.05); padding: 90px 52px; }
+.vmc-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-top: 48px; }
+.vmc-card { background: var(--dark2); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 32px 24px; position: relative; overflow: hidden; transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s; }
+.vmc-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--red); transform: scaleX(0); transition: transform 0.35s; transform-origin: left; }
+.vmc-card:hover { transform: translateY(-5px); border-color: rgba(224,16,16,0.3); box-shadow: 0 18px 46px rgba(0,0,0,0.45); }
+.vmc-card:hover::before { transform: scaleX(1); }
+.vmc-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 52px; color: rgba(224,16,16,0.12); line-height: 1; margin-bottom: 14px; }
+.vmc-label { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+.vmc-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 22px; text-transform: uppercase; color: var(--white); margin-bottom: 14px; }
+.vmc-body { font-size: 13px; color: var(--muted); line-height: 1.75; }
+.vmc-body ul { padding-left: 16px; margin-top: 6px; }
+.vmc-body ul li { margin-bottom: 6px; }
+.vmc-body strong { color: rgba(255,255,255,0.85); }
+
+/* ── MAP ── */
+.map-section { background: var(--black); padding: 90px 52px; }
+.map-wrap { border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); margin-top: 44px; height: 420px; }
+.map-wrap iframe { width: 100%; height: 100%; border: 0; }
+
+/* ── ETHOS — 2-column text ── */
+.ethos-section { background: var(--black); border-top: 1px solid rgba(255,255,255,0.05); padding: 90px 52px; }
+.ethos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 52px; }
+.ethos-col h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(26px,2.8vw,38px); text-transform: uppercase; color: var(--white); margin-bottom: 20px; }
+.ethos-col h3 span { color: var(--red); }
+.ethos-divider { width: 40px; height: 3px; background: var(--red); margin-bottom: 24px; border-radius: 2px; }
+.ethos-col p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.9; margin-bottom: 18px; }
+
+@media (max-width: 1100px) { .vmc-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 900px) {
+  .about-hero-content { padding: 0 24px; }
+  .about-tagline-wrap { height: 110px; }
+  .story-section, .vmc-section, .map-section, .ethos-section { padding: 60px 24px; }
+  .story-grid { grid-template-columns: 1fr; gap: 40px; }
+  .ethos-grid { grid-template-columns: 1fr; gap: 48px; }
+  .vmc-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .vmc-grid { grid-template-columns: 1fr; }
+  .about-tagline { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav>
+  <a class="logo" href="index.html"><img src="images/logo.jpeg" alt="Meitav Tech Limited"></a>
+  <ul class="nav-links">
+    <li><a href="index.html"    data-page="index.html">Home</a></li>
+    <li><a href="about.html"   data-page="about.html" class="active">About Us</a></li>
+    <li><a href="products.html" data-page="products.html">Products</a></li>
+    <li><a href="team.html"    data-page="team.html">Our Team</a></li>
+    <li><a href="contact.html" data-page="contact.html">Contact Us</a></li>
+  </ul>
+  <button class="nav-cta" onclick="waContact()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg>
+    WhatsApp Us
+  </button>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="about.html">About Us</a>
+  <a href="products.html">Products</a>
+  <a href="team.html">Our Team</a>
+  <a href="contact.html">Contact Us</a>
+</div>
+
+<!-- ══ ABOUT HERO — about-us.jpg fixed, taglines slide ══ -->
+<div class="about-hero">
+  <div class="about-hero-bg"></div>
+  <div class="about-hero-overlay"></div>
+  <div class="about-hero-content">
+    <div class="section-tag">Who We Are</div>
+    <div class="about-tagline-wrap">
+      <div class="about-tagline active">Dealing in over <span class="red">30+ top tech brands</span></div>
+      <div class="about-tagline">At Meitav we <span class="red">prioritise customer experience</span> and feedback.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ OUR STORY — handshake image left, text right ══ -->
+<section class="story-section">
+  <div class="section-tag">Our Story</div>
+  <div class="story-grid">
+    <div class="story-img-wrap reveal">
+      <img src="images/about-story.jpg" alt="Meitav Tech — Our Story">
+    </div>
+    <div class="story-text reveal">
+      <h2>Get to know<br><span>about us.</span></h2>
+      <div class="subhead">Built in Kampala. Built for the world.</div>
+      <p>Meitav Tech Limited was founded on one belief: every Ugandan deserves access to genuine, world-class technology at fair prices. We started on Wilson Road and grew into one of Kampala's most trusted tech store.</p>
+      <p>We deal in over 30 of the world's top technology brands — from Apple and Samsung to DJI, Canon, and Logitech — sourcing directly from certified distributors so every customer always gets the real thing.</p>
+      <p>Our team of passionate tech experts is available every day to help you find the right product for your budget, your workflow, and your lifestyle.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ VISION / MISSION / VALUES / STRATEGY — 4 horizontal cards ══ -->
+<section class="vmc-section">
+  <div class="section-tag">What drives us</div>
+  <h2 class="section-title">Our Foundation</h2>
+  <div class="vmc-grid">
+    <div class="vmc-card reveal">
+      <div class="vmc-num">01</div>
+      <div class="vmc-label">Vision</div>
+      <div class="vmc-title">Our Vision</div>
+      <div class="vmc-body">To be the most trusted local destination for accessible, high-quality technology — empowering people and businesses to do more through reliable gadgets, expert advice, and exceptional service.</div>
+    </div>
+    <div class="vmc-card reveal">
+      <div class="vmc-num">02</div>
+      <div class="vmc-label">Mission</div>
+      <div class="vmc-title">Our Mission</div>
+      <div class="vmc-body">To provide a curated selection of consumer electronics, computer hardware, and imaging solutions, paired with knowledgeable support and fair pricing — so customers confidently choose the right tech for their needs.</div>
+    </div>
+    <div class="vmc-card reveal">
+      <div class="vmc-num">03</div>
+      <div class="vmc-label">Values</div>
+      <div class="vmc-title">Core Values</div>
+      <div class="vmc-body">
+        <ul>
+          <li><strong>Customer-first</strong> — We listen, advise and deliver with empathy.</li>
+          <li><strong>Quality</strong> — We sell reliable products and stand behind them.</li>
+          <li><strong>Integrity</strong> — Transparent pricing, honest recommendations.</li>
+          <li><strong>Accessibility</strong> — Tech for every budget and skill level.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="vmc-card reveal">
+      <div class="vmc-num">04</div>
+      <div class="vmc-label">Brand Promise</div>
+      <div class="vmc-title">Our Strategy</div>
+      <div class="vmc-body">Meitav Tech delivers well-chosen technology and straightforward guidance so customers get the best value and performance. We combine expert curation, after-sales support, and community events to remain Kampala's go-to tech destination.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MAP — Jude Colour Solutions, Wilson Road ══ -->
+<section class="map-section">
+  <div class="section-tag">Find Us</div>
+  <h2 class="section-title">Visit Our Store</h2>
+  <p style="color:var(--muted);font-size:15px;margin-top:12px;line-height:1.7">Jude Colour Solutions Building, Wilson Road, Kampala, Uganda</p>
+  <div class="map-wrap reveal">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7611899038297!2d32.58040031475403!3d0.31762679977036!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177dbc4b7d09c555%3A0xd193d302e7517196!2sWilson%20Rd%2C%20Kampala%2C%20Uganda!5e0!3m2!1sen!2sug!4v1700000000000!5m2!1sen!2sug"
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+      title="Meitav Tech — Wilson Road, Kampala"></iframe>
+  </div>
+</section>
+
+<!-- ══ TARGET CLIENTS & ETHOS ══ -->
+<section class="ethos-section">
+  <div class="ethos-grid">
+    <div class="ethos-col reveal">
+      <div class="ethos-divider"></div>
+      <h3>Our Target <span>Clients</span></h3>
+      <p>At Meitav Tech, we make technology simple, reliable, and accessible. Founded to serve everyday users, creative professionals, and small businesses, our retail store offers a carefully selected range of gadgets, computers, cameras, and accessories from trusted brands.</p>
+      <p>Whether you're upgrading a workstation, building a custom PC, or choosing the right camera lens, our friendly team provides clear, expert advice so you can buy with confidence.</p>
+      <p>We believe great service begins with listening. Our staff take time to understand your needs, demonstrate products hands-on, and recommend solutions that balance performance, durability, and value.</p>
+    </div>
+    <div class="ethos-col reveal">
+      <div class="ethos-divider"></div>
+      <h3>Our <span>Ethos</span></h3>
+      <p>In addition to sales, we offer setup, diagnostics, and basic repair services to keep your devices performing at their best. Meitav Tech is your partner beyond the point of purchase.</p>
+      <p>Rooted in integrity and practical expertise, Meitav Tech is committed to honest pricing, transparent recommendations, and ongoing support. Visit us for quality gear, helpful guidance, and an enjoyable shopping experience.</p>
+      <p>Because when it comes to technology, <strong style="color:var(--white)">Meitav Tech delivers tech at its best.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo"><img src="images/logo.jpeg" alt="Meitav Tech Limited"></div>
+      <p>Kampala's trusted destination for authentic tech. Wilson Road, Kampala, Uganda.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="team.html">Our Team</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Categories</h4>
+      <ul>
+       <li><a href="products.html#sec-gadgets">Gadgets</a></li>
+        <li><a href="products.html#sec-monitors">Monitors</a></li>
+        <li><a href="products.html#sec-cameras">Cameras &amp; Lenses</a></li>
+        <li><a href="products.html#sec-tablets">Tablets</a></li>
+        <li><a href="products.html#sec-powerbanks">Power Banks</a></li>
+        <li><a href="products.html#sec-bags">Bags</a></li>
+        
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Meitav Tech Limited · Wilson Road, Kampala · Built with <span>♥</span> in Uganda</p>
+    <div class="social-links">
+      <a href="#" title="Facebook">f</a>
+      <a href="#" title="Instagram">ig</a>
+      <a id="waFooter" href="#" title="WhatsApp">wa</a>
+    </div>
+  </div>
+</footer>
+
+<a id="waFloat" href="#" class="wa-float" target="_blank" rel="noopener">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg>
+  <span>Chat with us</span>
+</a>
+
+<script src="main.js"></script>
+<script>
+/* About taglines rotation */
+let atIdx = 0, atTimer;
+const tags = document.querySelectorAll('.about-tagline');
+atTimer = setInterval(() => {
+  tags[atIdx].classList.remove('active');
+  atIdx = (atIdx + 1) % tags.length;
+  tags[atIdx].classList.add('active');
+}, 4000);
+</script>
+</body>
+</html>

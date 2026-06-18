@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us — Meitav Tech Limited</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.contact-hero {
+  height: 40vh; min-height: 280px; margin-top: 68px;
+  background: linear-gradient(135deg,#0a0a0a 0%,#1a0505 50%,#0a0a0a 100%);
+  display: flex; align-items: center; padding: 0 52px;
+  border-bottom: 1px solid rgba(224,16,16,0.15);
+  position: relative; overflow: hidden;
+}
+.contact-hero::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse at 40% 60%, rgba(224,16,16,0.09) 0%, transparent 70%);
+}
+.contact-hero-content { position: relative; z-index: 2; }
+.contact-hero h1 {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+  font-size: clamp(48px,7vw,90px); text-transform: uppercase;
+  line-height: 0.92; color: var(--white);
+}
+.contact-hero h1 span { color: var(--red); font-style: italic; }
+.contact-hero p { font-size: 16px; color: var(--muted); margin-top: 16px; max-width: 460px; line-height: 1.7; }
+
+/* Main contact section */
+.contact-main { padding: 80px 52px; background: var(--black); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 64px; align-items: start; }
+
+/* Info side */
+.contact-info h3 {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+  font-size: 34px; text-transform: uppercase; color: var(--white); margin-bottom: 12px;
+}
+.contact-info > p { color: var(--muted); font-size: 15px; line-height: 1.7; margin-bottom: 36px; }
+.contact-detail { display: flex; align-items: flex-start; gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.contact-detail:last-child { border-bottom: none; }
+.contact-icon { width: 44px; height: 44px; background: rgba(224,16,16,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.contact-icon svg { width: 20px; height: 20px; stroke: var(--red); fill: none; stroke-width: 2; }
+.contact-icon svg.filled { fill: var(--red); stroke: none; }
+.contact-detail-body label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.contact-detail-body span { font-size: 15px; font-weight: 600; color: var(--white); }
+.contact-detail-body a { color: #25d366; text-decoration: none; font-weight: 600; font-size: 15px; }
+.contact-detail-body a:hover { text-decoration: underline; }
+
+/* WhatsApp quick contact */
+.wa-quick {
+  margin-top: 28px; display: flex; align-items: center; gap: 14px;
+  background: rgba(37,211,102,0.08); border: 1px solid rgba(37,211,102,0.2);
+  border-radius: 12px; padding: 18px 22px;
+}
+.wa-quick svg { width: 28px; height: 28px; fill: #25d366; flex-shrink: 0; }
+.wa-quick-text p { font-size: 14px; font-weight: 600; color: var(--white); }
+.wa-quick-text span { font-size: 12px; color: var(--muted); }
+.wa-quick-btn {
+  margin-left: auto; background: #25d366; color: var(--white); font-weight: 700;
+  font-size: 13px; padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer;
+  white-space: nowrap; transition: background 0.2s, transform 0.15s; flex-shrink: 0;
+}
+.wa-quick-btn:hover { background: #1da851; transform: scale(1.03); }
+
+/* Form side */
+.contact-form-card { background: var(--dark2); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 38px; }
+.contact-form-card h3 { font-weight: 700; font-size: 20px; color: var(--white); margin-bottom: 26px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%; background: var(--gray); border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 8px; color: var(--white); font-family: 'Barlow', sans-serif;
+  font-size: 15px; padding: 13px 16px; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s; appearance: none;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(224,16,16,0.1); }
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: rgba(255,255,255,0.22); }
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-group select option { background: var(--gray2); }
+.form-submit { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.form-submit .btn-primary { flex: 1; justify-content: center; }
+.form-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 12px; }
+
+/* Map */
+.map-section { background: var(--dark); border-top: 1px solid rgba(255,255,255,0.05); padding: 80px 52px; }
+.map-wrap { border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); margin-top: 44px; height: 440px; }
+.map-wrap iframe { width: 100%; height: 100%; border: 0; }
+
+/* Hours table */
+.hours-section { background: var(--black); border-top: 1px solid rgba(255,255,255,0.05); padding: 80px 52px; }
+.hours-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 48px; align-items: start; }
+.hours-table { width: 100%; border-collapse: collapse; }
+.hours-table tr { border-bottom: 1px solid rgba(255,255,255,0.06); }
+.hours-table tr:last-child { border-bottom: none; }
+.hours-table td { padding: 14px 0; font-size: 15px; color: rgba(255,255,255,0.7); }
+.hours-table td:last-child { text-align: right; font-weight: 600; color: var(--white); }
+.hours-table td.closed { color: rgba(255,255,255,0.3); }
+.hours-open { display: inline-flex; align-items: center; gap: 6px; color: #22c55e; font-weight: 600; font-size: 13px; }
+.hours-open::before { content:''; width:7px; height:7px; border-radius:50%; background:#22c55e; animation: blink 2s infinite; }
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.hours-note { background: var(--dark2); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 28px; }
+.hours-note h4 { font-weight: 700; font-size: 16px; color: var(--white); margin-bottom: 12px; }
+.hours-note p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+.hours-note .highlight { color: var(--red); font-weight: 600; }
+
+@media (max-width: 900px) {
+  .contact-hero { padding: 0 24px; }
+  .contact-main, .map-section, .hours-section { padding: 60px 24px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+  .hours-grid { grid-template-columns: 1fr; gap: 32px; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav>
+  <a class="logo" href="index.html"><img src="images/logo.jpeg" alt="Meitav Tech Limited"></a>
+  <ul class="nav-links">
+    <li><a href="index.html"     data-page="index.html">Home</a></li>
+    <li><a href="about.html"    data-page="about.html">About Us</a></li>
+    <li><a href="products.html" data-page="products.html">Products</a></li>
+    <li><a href="team.html"     data-page="team.html">Our Team</a></li>
+    <li><a href="contact.html"  data-page="contact.html" class="active">Contact Us</a></li>
+  </ul>
+  <button class="nav-cta" onclick="waContact()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg>
+    WhatsApp Us
+  </button>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="about.html">About Us</a>
+  <a href="products.html">Products</a>
+  <a href="team.html">Our Team</a>
+  <a href="contact.html">Contact Us</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<div class="contact-hero">
+  <div class="contact-hero-content">
+    <div class="section-tag">We'd love to hear from you</div>
+    <h1>Contact <span>Us</span></h1>
+    <p>Visit us on Wilson Road, send a WhatsApp message, or fill in the form — we respond within minutes.</p>
+  </div>
+</div>
+
+<!-- ══ MAIN CONTACT ══ -->
+<section class="contact-main">
+  <div class="contact-grid">
+
+    <!-- Left: Contact Info -->
+    <div class="contact-info">
+      <h3>Get in Touch</h3>
+      <p>Our team is available Monday through Saturday to help you find the right tech, check stock availability, and process your order.</p>
+
+      <div class="contact-detail">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <div class="contact-detail-body">
+          <label>Our Address</label>
+          <span>Jude Colour Solutions Building, Wilson Road, Kampala, Uganda</span>
+        </div>
+      </div>
+
+      <div class="contact-detail">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+        <div class="contact-detail-body">
+          <label>Phone Number</label>
+          <!-- Replace with real number -->
+          <a href="tel:+256 705053005">+256 705 053 005</a>
+        </div>
+      </div>
+
+      <div class="contact-detail">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor" class="filled"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg>
+        </div>
+        <div class="contact-detail-body">
+          <label>WhatsApp</label>
+          
+          <a href="https://wa.me/256 705053005" target="_blank">+256 705 053 005</a>
+        </div>
+      </div>
+
+      <div class="contact-detail">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+        </div>
+        <div class="contact-detail-body">
+          <label>Email</label>
+          <a href="allanzzw018@gmail.com" target="_blank" style="color:rgba(255,255,255,0.7)">info@meitavtech.ug</a>
+        </div>
+      </div>
+
+      <div class="contact-detail">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="contact-detail-body">
+          <label>Opening Hours</label>
+          <span>Mon – Sat: 9:00 AM – 7:00 PM<br><span style="color:var(--muted);font-size:13px;font-weight:400">Sunday: 11:00 AM – 4:00 PM</span></span>
+        </div>
+      </div>
+
+      <!-- WhatsApp quick bar -->
+      <div class="wa-quick">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg>
+        <div class="wa-quick-text">
+          <p>Fastest response</p>
+          <span>Average reply under 5 minutes</span>
+        </div>
+        <button class="wa-quick-btn" onclick="waContact()">Chat Now</button>
+      </div>
+    </div>
+
+    <!-- Right: Enquiry form -->
+    <div class="contact-form-card">
+      <h3>Send an Enquiry</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="cName" placeholder="e.g. John Doe">
+        </div>
+        <div class="form-group">
+          <label>Phone / WhatsApp</label>
+          <input type="tel" id="cPhone" placeholder="+256 7XX XXX XXX">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Product Interest</label>
+        <select id="cProduct">
+          <option value="">Select a category...</option>
+          <option>Gadgets (Headphones, Earbuds, Smartwatch)</option>
+          <option>Monitors</option>
+          <option>Gimbals</option>
+          <option>Phone Accessories</option>
+          <option>Cameras &amp; Lenses</option>
+          <option>Tablets</option>
+          <option>Power Banks</option>
+          <option>Bags &amp; Cases</option>
+          <option>Other / General Enquiry</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Your Budget (Optional)</label>
+        <select id="cBudget">
+          <option value="">Select a budget range...</option>
+          <option>Under UGX 200,000</option>
+          <option>UGX 200K – 500K</option>
+          <option>UGX 500K – 1M</option>
+          <option>UGX 1M – 3M</option>
+          <option>UGX 3M – 5M</option>
+          <option>Above UGX 5M</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="cMsg" placeholder="Tell us what you're looking for, your budget, or any questions..."></textarea>
+      </div>
+      <div class="form-submit">
+        <button class="btn-primary" onclick="submitEnquiry()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg>
+          Send via WhatsApp
+        </button>
+      </div>
+      <p class="form-note">Your message opens directly in WhatsApp. We respond within minutes.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ MAP ══ -->
+<section class="map-section">
+  <div class="section-tag">Find Us</div>
+  <h2 class="section-title">We're on Wilson Road</h2>
+  <p style="color:var(--muted);font-size:15px;margin-top:12px;line-height:1.7">Jude Colour Solutions Building, Wilson Road, Kampala, Uganda</p>
+  <div class="map-wrap reveal">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7611899038297!2d32.58040031475403!3d0.31762679977036!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177dbc4b7d09c555%3A0xd193d302e7517196!2sWilson%20Rd%2C%20Kampala%2C%20Uganda!5e0!3m2!1sen!2sug!4v1700000000000!5m2!1sen!2sug"
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+      title="Meitav Tech — Wilson Road, Kampala"></iframe>
+  </div>
+</section>
+
+<!-- ══ HOURS ══ -->
+<section class="hours-section">
+  <div class="section-tag">When to visit</div>
+  <h2 class="section-title">Opening Hours</h2>
+  <div class="hours-grid">
+    <div>
+      <table class="hours-table">
+        <tr><td>Monday</td><td>9:00 AM – 7:00 PM</td></tr>
+        <tr><td>Tuesday</td><td>9:00 AM – 7:00 PM</td></tr>
+        <tr><td>Wednesday</td><td>9:00 AM – 7:00 PM</td></tr>
+        <tr><td>Thursday</td><td>9:00 AM – 7:00 PM</td></tr>
+        <tr><td>Friday</td><td>9:00 AM – 7:00 PM</td></tr>
+        <tr><td>Saturday</td><td>9:00 AM – 6:00 PM</td></tr>
+        <tr><td>Sunday</td><td class="closed">11:00 AM – 4:00 PM</td></tr>
+      </table>
+      <p style="margin-top:20px;font-size:13px;color:var(--muted)">Public holidays: hours may vary. Check our WhatsApp status for same-day confirmation.</p>
+    </div>
+    <div class="hours-note">
+      <h4>Can't visit in person?</h4>
+      <p>We offer <span class="highlight">same-day delivery</span> across Kampala for orders placed before 3 PM. Simply send us a WhatsApp message with what you need, confirm payment, and we bring it to you.</p>
+      <p style="margin-top:14px">For bulk or corporate orders, contact us directly and our team will arrange a custom quote and delivery schedule.</p>
+      <button class="btn-primary" style="margin-top:22px;width:100%;justify-content:center" onclick="waContact()">
+        Order via WhatsApp
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo"><img src="images/logo.jpeg" alt="Meitav Tech Limited"></div>
+      <p>Kampala's trusted destination for authentic tech. Wilson Road, Kampala, Uganda.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="team.html">Our Team</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Categories</h4>
+      <ul>
+        <li><a href="products.html#sec-gadgets">Gadgets</a></li>
+        <li><a href="products.html#sec-cameras">Cameras &amp; Lenses</a></li>
+        <li><a href="products.html#sec-tablets">Tablets</a></li>
+        <li><a href="products.html#sec-powerbanks">Power Banks</a></li>
+        <li><a href="products.html#sec-bags">Bags</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Meitav Tech Limited · Wilson Road, Kampala · Built with <span>♥</span> in Uganda</p>
+    <div class="social-links">
+      <a href="#" title="Facebook">f</a>
+      <a href="#" title="Instagram">ig</a>
+      <a id="waFooter" href="#" title="WhatsApp">wa</a>
+    </div>
+  </div>
+</footer>
+
+<a id="waFloat" href="#" class="wa-float" target="_blank" rel="noopener">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg>
+  <span>Chat with us</span>
+</a>
+
+<script src="main.js"></script>
+<script>
+function submitEnquiry() {
+  const name    = document.getElementById('cName').value.trim()    || 'Customer';
+  const phone   = document.getElementById('cPhone').value.trim()   || 'N/A';
+  const product = document.getElementById('cProduct').value        || 'General';
+  const budget  = document.getElementById('cBudget').value         || 'Not specified';
+  const msg     = document.getElementById('cMsg').value.trim()     || '';
+  const WA_NUMBER = '256000000000'; // ← replace with real number
+  const text = encodeURIComponent(
+    'Hello Meitav Tech!\n\n' +
+    'Name: '    + name    + '\n' +
+    'Phone: '   + phone   + '\n' +
+    'Interest: '+ product + '\n' +
+    'Budget: '  + budget  + '\n' +
+    'Message: ' + msg
+  );
+  window.open('https://wa.me/' + WA_NUMBER + '?text=' + text, '_blank');
+}
+</script>
+</body>
+</html>

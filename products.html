@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products — Meitav Tech Limited</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── PRODUCTS PAGE STYLES ── */
+.products-page-header {
+  padding: 110px 52px 48px;
+  background: var(--black);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.products-page-header h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900; font-size: clamp(44px,6.5vw,80px);
+  text-transform: uppercase; line-height: 0.93; color: var(--white);
+}
+.products-page-header h1 span { color: var(--red); font-style: italic; }
+.products-page-header p { font-size: 16px; color: var(--muted); margin-top: 16px; max-width: 500px; line-height: 1.7; }
+
+/* Category filter tabs */
+.cat-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 32px; }
+.cat-tab {
+  padding: 9px 20px; border-radius: 6px; font-size: 13px; font-weight: 600;
+  background: var(--dark2); border: 1px solid rgba(255,255,255,0.09);
+  color: var(--muted); cursor: pointer; transition: all 0.2s; letter-spacing: 0.3px;
+}
+.cat-tab.active, .cat-tab:hover { background: var(--red); border-color: var(--red); color: var(--white); }
+
+/* Category sections */
+.cat-section { padding: 70px 52px; border-top: 1px solid rgba(255,255,255,0.05); }
+.cat-section:nth-child(even) { background: var(--dark); }
+.cat-section-header { margin-bottom: 40px; }
+.cat-section-header h2 {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+  font-size: clamp(26px,3vw,40px); text-transform: uppercase; color: var(--white);
+}
+.cat-section-header h2 .num { color: rgba(224,16,16,0.5); margin-right: 12px; font-style: italic; }
+.cat-section-header p { font-size: 14px; color: var(--muted); margin-top: 8px; line-height: 1.6; max-width: 520px; }
+
+/* Product cards */
+.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 22px; }
+.product-card {
+  background: var(--dark2); border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 14px; overflow: hidden;
+  transition: transform 0.28s, border-color 0.28s, box-shadow 0.28s;
+  cursor: pointer; position: relative;
+}
+.product-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(224,16,16,0.45);
+  box-shadow: 0 24px 56px rgba(0,0,0,0.55), 0 0 0 1px rgba(224,16,16,0.18);
+}
+.product-badge {
+  position: absolute; top: 14px; left: 14px; background: var(--red);
+  color: var(--white); font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 4px; z-index: 2;
+}
+/* Real image container — white background to show product cleanly */
+.product-img {
+  width: 100%; height: 220px;
+  background: #ffffff;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; position: relative;
+}
+.product-img img {
+  width: 100%; height: 100%; object-fit: contain;
+  transition: transform 0.4s; padding: 12px;
+}
+.product-card:hover .product-img img { transform: scale(1.07); }
+/* Dark-bg variant for lifestyle/context images */
+.product-img.dark-bg { background: #111; }
+.product-img.dark-bg img { object-fit: cover; padding: 0; }
+
+.product-body { padding: 20px 22px 24px; }
+.product-brand { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+.product-name { font-weight: 700; font-size: 16px; color: var(--white); margin-bottom: 8px; line-height: 1.35; }
+.product-spec { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 18px; }
+.product-footer { display: flex; align-items: center; justify-content: space-between; }
+.product-price { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 23px; color: var(--white); }
+.product-price span { font-size: 13px; color: var(--muted); font-weight: 400; margin-left: 2px; }
+.btn-icon {
+  width: 40px; height: 40px; background: var(--red); border: none;
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.2s, transform 0.15s; flex-shrink: 0;
+}
+.btn-icon:hover { background: var(--red-dark); transform: scale(1.1); }
+.btn-icon svg { width: 18px; height: 18px; fill: white; }
+
+/* WA icon reusable */
+.wa-icon { width: 18px; height: 18px; fill: white; }
+
+@media (max-width: 900px) {
+  .products-page-header { padding: 90px 24px 36px; }
+  .cat-section { padding: 48px 24px; }
+  .products-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+}
+@media (max-width: 600px) {
+  .products-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .product-img { height: 160px; }
+  .product-name { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav>
+  <a class="logo" href="index.html"><img src="images/logo.jpeg" alt="Meitav Tech Limited"></a>
+  <ul class="nav-links">
+    <li><a href="index.html"    data-page="index.html">Home</a></li>
+    <li><a href="about.html"   data-page="about.html">About Us</a></li>
+    <li><a href="products.html" data-page="products.html" class="active">Products</a></li>
+    <li><a href="team.html"    data-page="team.html">Our Team</a></li>
+    <li><a href="contact.html" data-page="contact.html">Contact Us</a></li>
+  </ul>
+  <button class="nav-cta" onclick="waContact()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg>
+    WhatsApp Us
+  </button>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="about.html">About Us</a>
+  <a href="products.html">Products</a>
+  <a href="team.html">Our Team</a>
+  <a href="contact.html">Contact Us</a>
+</div>
+
+<!-- ══ PAGE HEADER ══ -->
+<div class="products-page-header">
+  <div class="section-tag">Everything Tech</div>
+  <h1>Our <span>Products</span></h1>
+  <p>Genuine products across 8 categories. Tap the WhatsApp button on any card to enquire about availability and current pricing.</p>
+  <div class="cat-tabs" id="catTabs">
+    <button class="cat-tab active"           onclick="filterCat('all')">All</button>
+    <button class="cat-tab" onclick="filterCat('gadgets')">Gadgets</button>
+    <button class="cat-tab" onclick="filterCat('monitors')">Monitors</button>
+    <button class="cat-tab" onclick="filterCat('gimbals')">Gimbals</button>
+    <button class="cat-tab" onclick="filterCat('phone')">Phone Accessories</button>
+    <button class="cat-tab" onclick="filterCat('cameras')">Cameras &amp; Lenses</button>
+    <button class="cat-tab" onclick="filterCat('tablets')">Tablets</button>
+    <button class="cat-tab" onclick="filterCat('powerbanks')">Power Banks</button>
+    <button class="cat-tab" onclick="filterCat('bags')">Bags</button>
+  </div>
+</div>
+
+<!-- ════════════════════
+  01 GADGETS
+════════════════════ -->
+<div class="cat-section" id="sec-gadgets">
+  <div class="cat-section-header">
+    <h2><span class="num">01</span>Gadgets</h2>
+    <p>Latest tech gadgets — earbuds, smart watches, wireless mics and more from top brands. Stay connected, entertained and productive.</p>
+  </div>
+  <div class="products-grid">
+
+    <!-- JBL Headphones — client uploaded image -->
+    <div class="product-card reveal">
+      <div class="product-badge">Popular</div>
+      <div class="product-img">
+        <img src="images/headphones.jpg" alt="JBL Tune 520BT Wireless Headphones">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">JBL</div>
+        <div class="product-name">JBL Tune 520BT Wireless Headphones</div>
+        <div class="product-spec">57hr Battery · Pure Bass Sound · Bluetooth 5.3 · Foldable</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 160K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('JBL Tune 520BT Wireless Headphones')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Apple AirPods Pro -->
+    <div class="product-card reveal">
+      <div class="product-badge">Hot</div>
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1603351154351-5e2d0600bb77?w=600&q=90&auto=format&fit=crop" alt="Apple AirPods Pro 2nd Gen">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Apple</div>
+        <div class="product-name">AirPods Pro (2nd Generation)</div>
+        <div class="product-spec">Active Noise Cancellation · 30hr Battery · USB-C · MagSafe</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 960K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Apple AirPods Pro 2nd Generation')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Samsung Galaxy Watch -->
+    <div class="product-card reveal">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=600&q=90&auto=format&fit=crop" alt="Samsung Galaxy Watch 6 Classic">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Samsung</div>
+        <div class="product-name">Galaxy Watch 6 Classic 47mm</div>
+        <div class="product-spec">AMOLED · Health Monitor · GPS · 5ATM Water Resist</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 1.1M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Samsung Galaxy Watch 6 Classic 47mm')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sony WH-1000XM5 -->
+    <div class="product-card reveal">
+      <div class="product-badge">Best Seller</div>
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=90&auto=format&fit=crop" alt="Sony WH-1000XM5">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Sony</div>
+        <div class="product-name">WH-1000XM5 Wireless Headphones</div>
+        <div class="product-spec">Industry-leading ANC · 30hr Battery · Hi-Res Audio · USB-C</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 820K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Sony WH-1000XM5 Wireless Headphones')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════
+  02 MONITORS
+════════════════════ -->
+<div class="cat-section" id="sec-monitors">
+  <div class="cat-section-header">
+    <h2><span class="num">02</span>Monitors</h2>
+    <p>4K, curved and gaming monitors from Dell, LG, Samsung and ASUS. Perfect for offices, studios and gaming setups.</p>
+  </div>
+  <div class="products-grid">
+
+    <!-- LG UltraWide -->
+    <div class="product-card reveal">
+      <div class="product-badge">Top Pick</div>
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=600&q=90&auto=format&fit=crop" alt="LG 34WN80C UltraWide Monitor">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">LG</div>
+        <div class="product-name">LG 34" UltraWide Curved Monitor</div>
+        <div class="product-spec">WQHD 3440×1440 · IPS · 60Hz · USB-C 65W · HDR10</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 2.2M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('LG 34 UltraWide Curved Monitor')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dell 4K Monitor -->
+    <div class="product-card reveal">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1547119957-637f8679db1e?w=600&q=90&auto=format&fit=crop" alt="Dell UltraSharp 27 4K Monitor">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Dell</div>
+        <div class="product-name">Dell UltraSharp 27" 4K Monitor</div>
+        <div class="product-spec">4K UHD IPS · USB-C Hub · 99% sRGB · Anti-Glare</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 1.9M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Dell UltraSharp 27 4K Monitor')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASUS ROG Gaming Monitor -->
+    <div class="product-card reveal">
+      <div class="product-badge">Gaming</div>
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&q=90&auto=format&fit=crop" alt="ASUS ROG Swift 27 Gaming Monitor">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">ASUS</div>
+        <div class="product-name">ASUS ROG Swift 27" 165Hz</div>
+        <div class="product-spec">QHD 2560×1440 · 165Hz · G-Sync · 1ms · HDR400</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 1.6M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('ASUS ROG Swift 27 165Hz Gaming Monitor')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Samsung Odyssey -->
+    <div class="product-card reveal">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1616763355548-1b606f439f86?w=600&q=90&auto=format&fit=crop" alt="Samsung Odyssey G5 32">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Samsung</div>
+        <div class="product-name">Samsung Odyssey G5 32" Curved</div>
+        <div class="product-spec">QHD · 165Hz · 1ms · AMD FreeSync · 1000R Curve</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 1.35M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Samsung Odyssey G5 32 Curved Gaming Monitor')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════
+  03 GIMBALS
+════════════════════ -->
+<div class="cat-section" id="sec-gimbals">
+  <div class="cat-section-header">
+    <h2><span class="num">03</span>Gimbals</h2>
+    <p>Stabilise every shot with DJI, Zhiyun and FeiyuTech gimbals for smartphones, mirrorless and action cameras.</p>
+  </div>
+  <div class="products-grid">
+
+    <!-- DJI OM 6 -->
+    <div class="product-card reveal">
+      <div class="product-badge">Best Seller</div>
+      <div class="product-img">
+        <img src="images/DJI Gimbal.jpg" alt="DJI OM 6 Phone Gimbal">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">DJI</div>
+        <div class="product-name">DJI OM 6 Smartphone Gimbal</div>
+        <div class="product-spec">3-Axis · ActiveTrack 6.0 · Magnetic Mount · 6.4hr Battery</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 480K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('DJI OM 6 Smartphone Gimbal')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DJI RS 3 -->
+    <div class="product-card reveal">
+      <div class="product-badge">Pro</div>
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1508921912186-1d1a45ebb3c1?w=600&q=90&auto=format&fit=crop" alt="DJI RS 3 Camera Gimbal">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">DJI</div>
+        <div class="product-name">DJI RS 3 Camera Gimbal</div>
+        <div class="product-spec">3-Axis · 3kg Payload · Bluetooth Shutter · Auto-Axis Lock</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 1.1M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('DJI RS 3 Camera Gimbal')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zhiyun Smooth 5S -->
+    <div class="product-card reveal">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&q=90&auto=format&fit=crop" alt="Zhiyun Smooth 5S Gimbal">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Zhiyun</div>
+        <div class="product-name">Zhiyun Smooth 5S Smartphone Gimbal</div>
+        <div class="product-spec">3-Axis · 300g Payload · Fill Light · 12hr Battery</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 390K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Zhiyun Smooth 5S Smartphone Gimbal')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════
+  04 PHONE ACCESSORIES
+════════════════════ -->
+<div class="cat-section" id="sec-phone">
+  <div class="cat-section-header">
+    <h2><span class="num">04</span>Phone Accessories</h2>
+    <p>Wireless mics, chargers, cables, cases and more to power up your smartphone experience.</p>
+  </div>
+  <div class="products-grid">
+
+    <!-- Lavalier Mic — client uploaded image -->
+    <div class="product-card reveal">
+      <div class="product-badge">New</div>
+      <div class="product-img">
+        <img src="images/lavalier.jpg" alt="Wireless Lavalier Microphone">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">TX Wireless</div>
+        <div class="product-name">Wireless Lavalier Mic Kit (2 Transmitters)</div>
+        <div class="product-spec">2.4GHz · LED Battery Display · USB-C / Lightning · Charging Case</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 180K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Wireless Lavalier Mic Kit 2 Transmitters')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anker MagSafe Charger -->
+    <div class="product-card reveal">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=600&q=90&auto=format&fit=crop" alt="Anker 3-in-1 MagSafe Charger">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Anker</div>
+        <div class="product-name">Anker 3-in-1 Cube MagSafe Charger</div>
+        <div class="product-spec">15W MagSafe · Watch + AirPods · Foldable · USB-C</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 165K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Anker 3-in-1 Cube MagSafe Charger')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logitech MX Master 3S -->
+    <div class="product-card reveal">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1527814050087-3793815479db?w=600&q=90&auto=format&fit=crop" alt="Logitech MX Master 3S">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Logitech</div>
+        <div class="product-name">Logitech MX Master 3S Mouse</div>
+        <div class="product-spec">8000 DPI · Quiet Clicks · USB-C · Multi-device Bluetooth</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 290K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Logitech MX Master 3S Mouse')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rode Wireless GO II -->
+    <div class="product-card reveal">
+      <div class="product-badge">Creator Pick</div>
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=600&q=90&auto=format&fit=crop" alt="Rode Wireless GO II">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Rode</div>
+        <div class="product-name">Rode Wireless GO II Dual Mic</div>
+        <div class="product-spec">2-Person Wireless · 200m Range · Built-in Recording · Universal</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 1.2M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Rode Wireless GO II Dual Wireless Microphone')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════
+  05 CAMERAS & LENSES
+════════════════════ -->
+<div class="cat-section" id="sec-cameras">
+  <div class="cat-section-header">
+    <h2><span class="num">05</span>Cameras &amp; Lenses</h2>
+    <p>Professional mirrorless cameras, lenses and drones from Canon, Sony, Nikon and DJI for creators and professionals.</p>
+  </div>
+  <div class="products-grid">
+
+    <!-- Canon EOS R6 Mark II -->
+    <div class="product-card reveal">
+      <div class="product-badge">Premium</div>
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=600&q=90&auto=format&fit=crop" alt="Canon EOS R6 Mark II">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Canon</div>
+        <div class="product-name">Canon EOS R6 Mark II</div>
+        <div class="product-spec">24.2MP · 4K 60fps · IBIS · 40fps RAW · Wi-Fi — Body only</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 4.2M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Canon EOS R6 Mark II Camera Body')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sony ZV-E10 -->
+    <div class="product-card reveal">
+      <div class="product-badge">Content Creator</div>
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=90&auto=format&fit=crop" alt="Sony ZV-E10 Mirrorless Camera">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Sony</div>
+        <div class="product-name">Sony ZV-E10 Mirrorless Camera</div>
+        <div class="product-spec">24.2MP · 4K · Flip Screen · E-Mount · Eye AF</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 1.95M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Sony ZV-E10 Mirrorless Camera')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DJI Mini 4 Pro -->
+    <div class="product-card reveal">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=600&q=90&auto=format&fit=crop" alt="DJI Mini 4 Pro Drone">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">DJI</div>
+        <div class="product-name">DJI Mini 4 Pro Drone</div>
+        <div class="product-spec">4K/60fps · 34min Flight · Omnidirectional Obstacle Sensing</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 2.4M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('DJI Mini 4 Pro Drone')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nikon Z50 -->
+    <div class="product-card reveal">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1495121553079-4c61bcce1894?w=600&q=90&auto=format&fit=crop" alt="Nikon Z50 Mirrorless Camera">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Nikon</div>
+        <div class="product-name">Nikon Z50 Mirrorless Camera</div>
+        <div class="product-spec">20.9MP · 4K · Flip Selfie Screen · Z-Mount · Wi-Fi</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 2.1M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Nikon Z50 Mirrorless Camera')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════
+  06 TABLETS
+════════════════════ -->
+<div class="cat-section" id="sec-tablets">
+  <div class="cat-section-header">
+    <h2><span class="num">06</span>Tablets</h2>
+    <p>Apple iPad, Samsung Galaxy Tab and Lenovo tablets for work, creativity and entertainment.</p>
+  </div>
+  <div class="products-grid">
+
+    <!-- iPad Pro M4 -->
+    <div class="product-card reveal">
+      <div class="product-badge">Just In</div>
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=90&auto=format&fit=crop" alt="Apple iPad Pro M4 11-inch">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Apple</div>
+        <div class="product-name">iPad Pro 11" M4 (2024)</div>
+        <div class="product-spec">M4 Chip · OLED 120Hz · 256GB · Wi-Fi · Apple Pencil Pro</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 3.8M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('iPad Pro 11 inch M4 2024 256GB')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Samsung Galaxy Tab S9 -->
+    <div class="product-card reveal">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1561154464-82e9adf32764?w=600&q=90&auto=format&fit=crop" alt="Samsung Galaxy Tab S9">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Samsung</div>
+        <div class="product-name">Samsung Galaxy Tab S9 11"</div>
+        <div class="product-spec">Snapdragon 8 Gen 2 · AMOLED 120Hz · 128GB · S-Pen included</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 2.6M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Samsung Galaxy Tab S9 11 inch 128GB')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- iPad Air M2 -->
+    <div class="product-card reveal">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1589739900266-43b2843f4c12?w=600&q=90&auto=format&fit=crop" alt="Apple iPad Air M2">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Apple</div>
+        <div class="product-name">iPad Air 11" M2 (2024)</div>
+        <div class="product-spec">M2 Chip · Liquid Retina · 128GB · Wi-Fi · USB-C</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 2.8M <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('iPad Air 11 inch M2 2024 128GB')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════
+  07 POWER BANKS
+════════════════════ -->
+<div class="cat-section" id="sec-powerbanks">
+  <div class="cat-section-header">
+    <h2><span class="num">07</span>Power Banks</h2>
+    <p>Keep your devices charged on the go with high-capacity power banks from Anker, Baseus and Samsung.</p>
+  </div>
+  <div class="products-grid">
+
+    <!-- Anker 24K MagSafe -->
+    <div class="product-card reveal">
+      <div class="product-badge">Top Rated</div>
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=6" alt="Anker 737 Power Bank 24000mAh">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Anker</div>
+        <div class="product-name">Anker 737 Power Bank 24,000mAh</div>
+        <div class="product-spec">140W USB-C · Smart Display · 3 Ports · Fast Charge 65W</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 320K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Anker 737 Power Bank 24000mAh')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Baseus Magnetic -->
+    <div class="product-card reveal">
+      <div class="product-img">
+        <img src="images/power banks.jpg" alt="Baseus Magnetic Power Bank 10000mAh">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Baseus</div>
+        <div class="product-name">Baseus Magnetic 10,000mAh MagSafe</div>
+        <div class="product-spec">15W MagSafe · Slim Design · USB-C 20W · LED Indicator</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 145K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Baseus Magnetic Power Bank 10000mAh MagSafe')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Samsung 25W -->
+    <div class="product-card reveal">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=600&q=90&auto=format&fit=crop" alt="Samsung 25W Power Bank 10000mAh">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Samsung</div>
+        <div class="product-name">Samsung 25W Super Fast Charge 10,000mAh</div>
+        <div class="product-spec">25W USB-C · 15W Wireless Pad · Slim · 2 Devices</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 130K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Samsung 25W Power Bank 10000mAh')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════
+  08 BAGS
+════════════════════ -->
+<div class="cat-section" id="sec-bags">
+  <div class="cat-section-header">
+    <h2><span class="num">08</span>Bags</h2>
+    <p>Carry your tech safely with premium laptop bags, camera backpacks and drone cases from top brands.</p>
+  </div>
+  <div class="products-grid">
+
+    <!-- Incase DSLR Pro Bag -->
+    <div class="product-card reveal">
+      <div class="product-badge">Pro</div>
+      <div class="product-img dark-bg">
+        <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=90&auto=format&fit=crop" alt="Camera Backpack DSLR">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Lowepro</div>
+        <div class="product-name">Lowepro ProTactic BP 450 AW II</div>
+        <div class="product-spec">Fits Full-Frame DSLR · 15" Laptop · Rain Cover · Side Access</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 380K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Lowepro ProTactic BP 450 AW II Camera Backpack')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tomtoc Laptop Bag -->
+    <div class="product-card reveal">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?w=600&q=90&auto=format&fit=crop" alt="Tomtoc Laptop Sleeve 15 inch">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Tomtoc</div>
+        <div class="product-name">Tomtoc 360° Laptop Shoulder Bag 15"</div>
+        <div class="product-spec">Military Drop Test · Water Resistant · Accessories Pockets</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 95K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('Tomtoc 360 Protective Laptop Shoulder Bag 15 inch')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DJI Drone Backpack -->
+    <div class="product-card reveal">
+      <div class="product-img travel-bags">
+        <img src="images/bag collection.jpg" alt="DJI Convertible Carrying Bag-collection">
+      </div>
+      <div class="product-body">
+        <div class="product-brand">DJI</div>
+        <div class="product-name">DJI Convertible Carrying Bag</div>
+        <div class="product-spec">Fits Mini / Air / Mavic Series · Shoulder + Backpack · 3 Pack</div>
+        <div class="product-footer">
+          <div class="product-price">UGX 210K <span>/ unit</span></div>
+          <button class="btn-icon" onclick="wa('DJI Convertible Carrying Bag')"><svg viewBox="0 0 24 24" class="wa-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg></button>
+        </div>
+        
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo"><img src="images/logo.jpeg" alt="Meitav Tech Limited"></div>
+      <p>Kampala's trusted destination for authentic tech. Wilson Road, Kampala, Uganda.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="team.html">Our Team</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Categories</h4>
+      <ul>
+        <li><a href="products.html#sec-gadgets">Gadgets</a></li>
+        <li><a href="products.html#sec-monitors">Monitors</a></li>
+        <li><a href="products.html#sec-cameras">Cameras &amp; Lenses</a></li>
+        <li><a href="products.html#sec-tablets">Tablets</a></li>
+        <li><a href="products.html#sec-powerbanks">Power Banks</a></li>
+        <li><a href="products.html#sec-bags">Power Banks</a>Bags</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Meitav Tech Limited · Wilson Road, Kampala · Built with <span>♥</span> in Uganda</p>
+    <div class="social-links">
+      <a href="#" title="Facebook">f</a>
+      <a href="#" title="Instagram">ig</a>
+      <a id="waFooter" href="#" title="WhatsApp">wa</a>
+    </div>
+  </div>
+</footer>
+
+<a id="waFloat" href="#" class="wa-float" target="_blank" rel="noopener">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.655 1.435 5.163L2 22l4.837-1.435A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.92 13.37c-.194.547-1.14 1.048-1.566 1.102-.399.05-.902.072-1.456-.091a13.31 13.31 0 01-1.317-.487c-2.314-1-3.82-3.353-3.937-3.51-.116-.156-.95-1.264-.95-2.41s.6-1.712.814-1.945c.213-.233.464-.29.619-.29l.446.008c.143.006.335-.054.524.4.194.465.66 1.607.717 1.724.058.116.097.252.02.406-.078.155-.117.252-.232.388-.116.135-.244.302-.349.406-.116.116-.236.241-.101.473.135.232.6.99 1.288 1.603.885.787 1.631 1.03 1.864 1.146.232.116.368.097.503-.058.136-.155.582-.678.737-.91.154-.232.31-.194.522-.116.214.077 1.355.64 1.588.756.233.116.388.174.446.271.058.097.058.561-.136 1.108z"/></svg>
+  <span>Chat with us</span>
+</a>
+
+<script src="main.js"></script>
+<script>
+/* Category filter */
+function filterCat(cat) {
+  const sections = ['gadgets','monitors','gimbals','phone','cameras','tablets','powerbanks','bags'];
+  sections.forEach(id => {
+    const el = document.getElementById('sec-' + id);
+    if (el) el.style.display = (cat === 'all' || cat === id) ? '' : 'none';
+  });
+  document.querySelectorAll('.cat-tab').forEach(tab => {
+    const m = tab.getAttribute('onclick').match(/'([^']+)'/);
+    tab.classList.toggle('active', m && m[1] === cat);
+  });
+  if (cat !== 'all') {
+    setTimeout(() => {
+      const t = document.getElementById('sec-' + cat);
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  }
+}
+
+/* Anchor deep-linking: products.html#sec-cameras */
+window.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash.replace('#','');
+  if (hash && document.getElementById(hash)) {
+    setTimeout(() => document.getElementById(hash).scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
+  }
+});
+</script>
+</body>
+</html>
