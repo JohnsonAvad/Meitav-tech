@@ -4,7 +4,7 @@
 ═══════════════════════════════════════════ */
 
 /* ── CONFIG: Replace with client's real WhatsApp number (digits only, no +) ── */
-const WA_NUMBER = '256000000000'; // e.g. 256772123456
+const WA_NUMBER = '256705053005'; // e.g. 256772123456
 const WA_BASE   = 'https://wa.me/' + WA_NUMBER;
 const WA_MSG    = encodeURIComponent("Hello Meitav Tech! I'd like to enquire about a product.");
 
